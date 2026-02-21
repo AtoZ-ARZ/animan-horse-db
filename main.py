@@ -158,26 +158,48 @@ def create_post(post: PostCreate, db = Depends(get_db)):
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(post.password.encode('utf-8'), salt).decode('utf-8')
     
-    cursor.execute('''
+    query = '''
         INSERT INTO posts (
             horse_name, club, race_date, racecourse, race_number, 
             conditions, confidence, poster_name, comment, password
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (
-        post.horse_name, post.club, post.race_date, post.racecourse, post.race_number,
-        post.conditions, post.confidence, post.poster_name, post.comment, hashed_password
-    ))
-    db.commit()
-    post_id = cursor.lastrowid
+    '''
     
-    cursor.execute('SELECT * FROM posts WHERE id = ?', (post_id,))
+    if DATABASE_URL:
+        query = query.replace('?', '%s')
+        # PostgreSQL では RETURNING id で挿入したIDを取得する
+        query += " RETURNING id"
+        cursor.execute(query, (
+            post.horse_name, post.club, post.race_date, post.racecourse, post.race_number,
+            post.conditions, post.confidence, post.poster_name, post.comment, hashed_password
+        ))
+        post_id = cursor.fetchone()['id']
+    else:
+        cursor.execute(query, (
+            post.horse_name, post.club, post.race_date, post.racecourse, post.race_number,
+            post.conditions, post.confidence, post.poster_name, post.comment, hashed_password
+        ))
+        post_id = cursor.lastrowid
+    db.commit()
+    
+    if DATABASE_URL:
+        cursor.execute('SELECT * FROM posts WHERE id = %s', (post_id,))
+    else:
+        cursor.execute('SELECT * FROM posts WHERE id = ?', (post_id,))
+        
     new_post = dict(cursor.fetchone())
+    if isinstance(new_post.get('created_at'), datetime):
+        new_post['created_at'] = new_post['created_at'].strftime("%Y-%m-%d %H:%M:%S")
+        
     return new_post
 
 @app.put("/api/posts/{post_id}", response_model=PostResponse)
 def update_post(post_id: int, post: PostUpdate, db: sqlite3.Connection = Depends(get_db)):
     cursor = db.cursor()
-    cursor.execute('SELECT password FROM posts WHERE id = ?', (post_id,))
+    if DATABASE_URL:
+        cursor.execute('SELECT password FROM posts WHERE id = %s', (post_id,))
+    else:
+        cursor.execute('SELECT password FROM posts WHERE id = ?', (post_id,))
     row = cursor.fetchone()
     if not row:
         raise HTTPException(status_code=404, detail="Post not found")
