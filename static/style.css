@@ -1,0 +1,665 @@
+:root {
+    --primary-color: #1a5e20;
+    /* 芝をイメージしたトラディショナルなグリーン */
+    --primary-light: #4c8c4a;
+    --primary-dark: #003300;
+    --secondary-color: #d4af37;
+    /* 上品なゴールド */
+    --secondary-hover: #b5952f;
+    --bg-color: #f0f4f8;
+    --card-bg: #ffffff;
+    --text-main: #2c3e50;
+    --text-muted: #64748b;
+    --error-color: #e53935;
+    --warning-color: #f59e0b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+    color: white;
+    padding: 2rem 1rem;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+button {
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.primary-btn,
+.submit-btn {
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 30px;
+    box-shadow: var(--shadow-sm);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.primary-btn:hover,
+.submit-btn:hover {
+    background-color: var(--secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.delete-btn {
+    background-color: #fff;
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 30px;
+}
+
+.delete-btn:hover {
+    background-color: #fff0f0;
+}
+
+.cancel-btn {
+    background-color: #e2e8f0;
+    color: var(--text-main);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 30px;
+}
+
+.cancel-btn:hover {
+    background-color: #cbd5e1;
+}
+
+/* Main & Timeline */
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.timeline-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.loading {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+    font-size: 1.1rem;
+}
+
+.empty-state {
+    text-align: center;
+    background: #fff;
+    padding: 3rem;
+    border-radius: 12px;
+    color: var(--text-muted);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border-left: 6px solid var(--primary-color);
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.race-info {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.race-date {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+}
+
+.horse-name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    color: #1e293b;
+}
+
+.card-details {
+    margin-bottom: 1rem;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #e2e8f0;
+    color: #475569;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tag.racecourse {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.tag.conditions {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.tag.club {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.stars {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.comment-box {
+    background-color: #f8fafc;
+    border-left: 3px solid #cbd5e1;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.95rem;
+    color: #334155;
+    white-space: pre-wrap;
+}
+
+.poster {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 0.5rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0.2rem;
+}
+
+.action-btn:hover {
+    color: var(--primary-color);
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow-y: auto;
+    animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: var(--text-main);
+}
+
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 0.5rem;
+    color: var(--primary-dark);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group.row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-group.row .col {
+    flex: 1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.required {
+    color: var(--error-color);
+    margin-left: 0.2rem;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(26, 94, 32, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+/* Footer */
+footer {
+    background-color: #f8fafc;
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.footer-content p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+/* --- Club Tags (Silk Colors) --- */
+/* DEFAULT */
+.tag.club.tag-default {
+    background-color: #64748b;
+    color: white;
+    border-left: 4px solid #94a3b8;
+}
+
+/* SHADAI GROUP */
+.tag.club.tag-sunday {
+    /* 黒枠、黄×黒、赤バッテンっぽく: 黒地、黄文字、赤袖アクセント */
+    background: #000000;
+    color: #ffd700;
+    border-left: 4px solid #e53935;
+}
+
+.tag.club.tag-shadai {
+    /* 黄、黒縦縞、袖青一本輪: 黄地、黒文字、青袖アクセント */
+    background: #ffd700;
+    color: #000000;
+    border-left: 4px solid #0000cd;
+}
+
+.tag.club.tag-g1 {
+    /* 黒、赤襷、袖赤一本輪: 黒地、白文字、赤袖アクセント */
+    background: #000000;
+    color: #ffffff;
+    border-left: 4px solid #e53935;
+}
+
+.tag.club.tag-carrot {
+    /* 緑、白二本輪、白袖赤一本輪: 緑地、白文字、赤（袖の輪）アクセント */
+    background: #1a5e20;
+    color: #ffffff;
+    border-left: 4px solid #e53935;
+}
+
+.tag.club.tag-silk {
+    /* 水色、赤玉霰、袖赤一本輪: 水色地、黒文字、赤袖アクセント */
+    background: #e0f2fe;
+    color: #0f172a;
+    border-left: 4px solid #e53935;
+}
+
+/* OTHER MAJOR CLUBS */
+.tag.club.tag-dmm {
+    /* 黒、緑山形一本輪、緑袖: 黒地、白文字、緑袖アクセント */
+    background: #000000;
+    color: #ffffff;
+    border-left: 4px solid #1a5e20;
+}
+
+.tag.club.tag-tokyo-tc {
+    /* 赤、白星散、袖白一本輪: 赤地、白文字、白袖アクセント */
+    background: #e53935;
+    color: #ffffff;
+    border-left: 4px solid #ffffff;
+    border: 1px solid #e53935;
+}
+
+.tag.club.tag-normandy {
+    /* 勝負服: 黒、青山形一本輪: 黒地、白文字、青アクセント */
+    background: #000000;
+    color: #ffffff;
+    border-left: 4px solid #1e40af;
+}
+
+.tag.club.tag-win {
+    /* 赤、黒縦縞、白袖赤一本輪: 赤地、白文字、白袖アクセント */
+    background: #e53935;
+    color: #ffffff;
+    border-left: 4px solid #ffffff;
+    border: 1px solid #e53935;
+}
+
+.tag.club.tag-ruffian {
+    /* 赤、緑菱山形、赤袖緑一本輪: 赤地、白文字、緑（袖の輪）アクセント */
+    background: #e53935;
+    color: #ffffff;
+    border-left: 4px solid #1a5e20;
+}
+
+.tag.club.tag-lord {
+    /* 白、青一本輪、青袖: 白地、青文字、青袖アクセント */
+    background: #ffffff;
+    color: #1e40af;
+    border-left: 4px solid #1e40af;
+    border: 1px solid #e2e8f0;
+}
+
+.tag.club.tag-hiroo {
+    /* 緑、白一本輪、白袖緑一本輪: 緑地、白文字、白袖アクセント */
+    background: #1a5e20;
+    color: #ffffff;
+    border-left: 4px solid #ffffff;
+    border: 1px solid #1a5e20;
+}
+
+.tag.club.tag-ygg {
+    /* 黒、黄茶十字襷: 黒地、黄文字、茶アクセント */
+    background: #000000;
+    color: #ffd700;
+    border-left: 4px solid #8b4513;
+}
+
+.tag.club.tag-lion {
+    /* 勝負服: 黄、黒一本輪、黒袖: 黄地、黒文字、黒袖アクセント */
+    background: #ffd700;
+    color: #000000;
+    border-left: 4px solid #000000;
+}
+
+.tag.club.tag-green {
+    /* 緑、黒三本輪: 緑地、白文字、黒アクセント */
+    background: #4c8c4a;
+    color: #ffffff;
+    border-left: 4px solid #000000;
+}
+
+.tag.club.tag-yushun {
+    /* 緑、黒三本輪: 緑地、白文字、黒アクセント */
+    background: #1a5e20;
+    color: #ffffff;
+    border-left: 4px solid #000000;
+}
+
+.tag.club.tag-union {
+    /* 緑、赤襷、赤袖: 緑地、白文字、赤袖アクセント */
+    background: #1a5e20;
+    color: #ffffff;
+    border-left: 4px solid #e53935;
+}
+
+.tag.club.tag-turfite {
+    /* ターコイズブルー、黒星散、黒袖: 水色地、黒文字、黒袖アクセント */
+    background: #40e0d0;
+    color: #000000;
+    border-left: 4px solid #000000;
+}
+
+.tag.club.tag-laurel {
+    /* ピンク、黄一本輪: ピンク地、茶文字、黄アクセント */
+    background: #ffc0cb;
+    color: #8b4513;
+    border-left: 4px solid #ffd700;
+}
+
+.tag.club.tag-taiki {
+    /* 青、白一本輪: 青地、白文字、白アクセント */
+    background: #1e40af;
+    color: #ffffff;
+    border-left: 4px solid #ffffff;
+    border: 1px solid #1e40af;
+}
+
+.tag.club.tag-waraukado {
+    /* 黒、赤白襷: 黒地、白文字、赤アクセント */
+    background: #000000;
+    color: #ffffff;
+    border-left: 4px solid #e53935;
+}
+
+.tag.club.tag-insel {
+    /* 白、鼠元禄: 白地、黒文字、鼠アクセント */
+    background: #ffffff;
+    color: #000000;
+    border-left: 4px solid #808080;
+    border: 1px solid #e2e8f0;
+}
+
+.tag.club.tag-kyoto-tc {
+    /* 黄、青十字襷、袖青縦縞: 黄地、青文字、青袖アクセント */
+    background: #ffd700;
+    color: #1e40af;
+    border-left: 4px solid #1e40af;
+}
+
+.tag.club.tag-other {
+    /* その他・個人等 */
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px dashed #cbd5e1;
+}
+
+.tag.club.tag-laurel {
+    /* ピンク、黄一本輪: ピンク地、茶文字、黄アクセント */
+    background: #ffc0cb;
+    color: #8b4513;
+    border-left: 4px solid #ffd700;
+}
+
+.tag.club.tag-taiki {
+    /* 青、白一本輪: 青地、白文字、白アクセント */
+    background: #1e40af;
+    color: #ffffff;
+    border-left: 4px solid #ffffff;
+    border: 1px solid #1e40af;
+}
+
+.tag.club.tag-waraukado {
+    /* 黒、赤白襷: 黒地、白文字、赤アクセント */
+    background: #000000;
+    color: #ffffff;
+    border-left: 4px solid #e53935;
+}
+
+.tag.club.tag-insel {
+    /* 白、鼠元禄: 白地、黒文字、鼠アクセント */
+    background: #ffffff;
+    color: #000000;
+    border-left: 4px solid #808080;
+    border: 1px solid #e2e8f0;
+}
+
+.tag.club.tag-kyoto-tc {
+    /* 黄、青十字襷、袖青縦縞: 黄地、青文字、青袖アクセント */
+    background: #ffd700;
+    color: #1e40af;
+    border-left: 4px solid #1e40af;
+}
+
+.tag.club.tag-other {
+    /* その他・個人等 */
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px dashed #cbd5e1;
+}

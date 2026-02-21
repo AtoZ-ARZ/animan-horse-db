@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一口馬主 出走予定タイムライン</title>
+    <link rel="stylesheet" href="/static/style.css?v=7">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🏇 あにまん一口馬主部 出走予定タイムライン</h1>
+            <p>あにまん掲示板の「一口馬主部」向け出走予定共有サイトです。愛馬の出走予定をみんなでシェアしよう！</p>
+            <button id="open-post-modal-btn" class="primary-btn">＋ 新規投稿</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="timeline" class="timeline-container">
+            <div class="loading">読み込み中...</div>
+            <!-- 投稿カードが非同期でここに追加されます -->
+        </div>
+    </main>
+
+    <!-- 新規投稿モーダル -->
+    <div id="post-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" data-modal="post-modal">&times;</span>
+            <h2>新規出走予定を投稿</h2>
+            <form id="post-form">
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="horse_name">馬名 <span class="required">*</span></label>
+                        <input type="text" id="horse_name" name="horse_name" required placeholder="例: アーモンドアイ">
+                    </div>
+                    <div class="col">
+                        <label for="club">所属クラブ <span class="required">*</span></label>
+                        <select id="club" name="club" required>
+                            <option value="">選択してください</option>
+                            <optgroup label="社台グループ系">
+                                <option value="サンデーR">サンデーレーシング</option>
+                                <option value="社台RH">社台レースホース</option>
+                                <option value="G1レーシング">G1レーシング</option>
+                                <option value="キャロット">キャロットクラブ</option>
+                                <option value="シルク">シルクホースクラブ</option>
+                            </optgroup>
+                            <optgroup label="その他主要クラブ">
+                                <option value="DMMバヌーシー">DMMバヌーシー</option>
+                                <option value="東サラ">東京サラブレッドクラブ</option>
+                                <option value="ノルマンディー">ノルマンディーOC</option>
+                                <option value="ウイン">ウインレーシングクラブ</option>
+                                <option value="ラフィアン">ラフィアンターフマンクラブ</option>
+                                <option value="ロード">ロードホースクラブ</option>
+                                <option value="広尾">広尾サラブレッド倶楽部</option>
+                                <option value="YGG">YGGオーナーズクラブ</option>
+                                <option value="ライオン">サラブレッドクラブライオン</option>
+                                <option value="グリーン">グリーンファーム愛馬会</option>
+                                <option value="友駿">友駿ホースクラブ</option>
+                                <option value="ユニオン">ユニオンオーナーズクラブ</option>
+                                <option value="ターファイト">ターファイトクラブ</option>
+                                <option value="ローレル">ローレルクラブ</option>
+                                <option value="大樹">大樹レーシングクラブ</option>
+                                <option value="ワラウカド">ワラウカド</option>
+                                <option value="インゼル">インゼルサラブレッドクラブ</option>
+                                <option value="京サラ">京都サラブレッドクラブ</option>
+                                <option value="バゴバゴ">その他・個人等</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="race_date">出走日 <span class="required">*</span></label>
+                        <input type="date" id="race_date" name="race_date" required>
+                    </div>
+                    <div class="col">
+                        <label for="racecourse">競馬場 <span class="required">*</span></label>
+                        <select id="racecourse" name="racecourse" required>
+                            <option value="">選択してください</option>
+                            <optgroup label="JRA (中央)">
+                                <option value="札幌">札幌</option>
+                                <option value="函館">函館</option>
+                                <option value="福島">福島</option>
+                                <option value="新潟">新潟</option>
+                                <option value="東京">東京</option>
+                                <option value="中山">中山</option>
+                                <option value="中京">中京</option>
+                                <option value="京都">京都</option>
+                                <option value="阪神">阪神</option>
+                                <option value="小倉">小倉</option>
+                            </optgroup>
+                            <optgroup label="地方競馬">
+                                <option value="門別">門別</option>
+                                <option value="帯広">帯広(ばんえい)</option>
+                                <option value="盛岡">盛岡</option>
+                                <option value="水沢">水沢</option>
+                                <option value="浦和">浦和</option>
+                                <option value="船橋">船橋</option>
+                                <option value="大井">大井</option>
+                                <option value="川崎">川崎</option>
+                                <option value="金沢">金沢</option>
+                                <option value="笠松">笠松</option>
+                                <option value="名古屋">名古屋</option>
+                                <option value="園田">園田</option>
+                                <option value="姫路">姫路</option>
+                                <option value="高知">高知</option>
+                                <option value="佐賀">佐賀</option>
+                            </optgroup>
+                            <optgroup label="その他">
+                                <option value="海外">海外</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="race_number">レース番号 <span class="required">*</span></label>
+                        <select id="race_number" name="race_number" required>
+                            <option value="">選択</option>
+                            <option value="1">1 R</option>
+                            <option value="2">2 R</option>
+                            <option value="3">3 R</option>
+                            <option value="4">4 R</option>
+                            <option value="5">5 R</option>
+                            <option value="6">6 R</option>
+                            <option value="7">7 R</option>
+                            <option value="8">8 R</option>
+                            <option value="9">9 R</option>
+                            <option value="10">10 R</option>
+                            <option value="11">11 R</option>
+                            <option value="12">12 R</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="surface">コース条件 <span class="required">*</span></label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <select id="surface" name="surface" required style="flex: 1;">
+                                <option value="芝">芝</option>
+                                <option value="ダート">ダート</option>
+                                <option value="障害">障害</option>
+                            </select>
+                            <input type="text" id="distance" name="distance" required placeholder="例: 2400m"
+                                style="flex: 2;">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confidence">自信度 <span class="required">*</span></label>
+                    <select id="confidence" name="confidence" required>
+                        <option value="5">★★★★★ (大勝負！)</option>
+                        <option value="4">★★★★☆ (期待大)</option>
+                        <option value="3" selected>★★★☆☆ (チャンスあり)</option>
+                        <option value="2">★★☆☆☆ (入着目標)</option>
+                        <option value="1">★☆☆☆☆ (無事これ名馬)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">一言コメント (任意)</label>
+                    <textarea id="comment" name="comment" rows="2" placeholder="意気込みなどをどうぞ！"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="poster_name">投稿者名 (任意)</label>
+                    <input type="text" id="poster_name" name="poster_name" placeholder="名無しさん">
+                </div>
+                <div class="form-group">
+                    <label for="password">編集・削除用パスワード <span class="required">*</span></label>
+                    <input type="password" id="password" name="password" required placeholder="後で編集・削除する際に必要です">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn" id="submit-post-btn">投稿する</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 編集・削除パスワード確認＆編集モーダル -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" data-modal="edit-modal">&times;</span>
+            <h2 id="edit-title">投稿を編集 / 削除</h2>
+
+            <div id="auth-section">
+                <p>この投稿を編集・削除するにはパスワードを入力してください。</p>
+                <div class="form-group">
+                    <input type="password" id="auth-password" placeholder="パスワード">
+                </div>
+                <div id="auth-error" class="error-message hidden">パスワードが間違っています。</div>
+                <div class="form-actions">
+                    <button type="button" id="confirm-delete-btn" class="delete-btn">削除する</button>
+                    <button type="button" id="unlock-edit-btn" class="submit-btn">編集する</button>
+                </div>
+            </div>
+
+            <form id="edit-form" class="hidden">
+                <input type="hidden" id="edit-post-id">
+                <div class="form-group row mt-2">
+                    <div class="col">
+                        <label for="edit_horse_name">馬名 <span class="required">*</span></label>
+                        <input type="text" id="edit_horse_name" name="horse_name" required>
+                    </div>
+                    <div class="col">
+                        <label for="edit_club">所属クラブ <span class="required">*</span></label>
+                        <select id="edit_club" name="club" required>
+                            <optgroup label="社台グループ系">
+                                <option value="サンデーR">サンデーレーシング</option>
+                                <option value="社台RH">社台レースホース</option>
+                                <option value="G1レーシング">G1レーシング</option>
+                                <option value="キャロット">キャロットクラブ</option>
+                                <option value="シルク">シルクホースクラブ</option>
+                            </optgroup>
+                            <optgroup label="その他主要クラブ">
+                                <option value="DMMバヌーシー">DMMバヌーシー</option>
+                                <option value="東サラ">東京サラブレッドクラブ</option>
+                                <option value="ノルマンディー">ノルマンディーOC</option>
+                                <option value="ウイン">ウインレーシングクラブ</option>
+                                <option value="ラフィアン">ラフィアンターフマンクラブ</option>
+                                <option value="ロード">ロードホースクラブ</option>
+                                <option value="広尾">広尾サラブレッド倶楽部</option>
+                                <option value="YGG">YGGオーナーズクラブ</option>
+                                <option value="ライオン">サラブレッドクラブライオン</option>
+                                <option value="グリーン">グリーンファーム愛馬会</option>
+                                <option value="友駿">友駿ホースクラブ</option>
+                                <option value="ユニオン">ユニオンオーナーズクラブ</option>
+                                <option value="ターファイト">ターファイトクラブ</option>
+                                <option value="ローレル">ローレルクラブ</option>
+                                <option value="大樹">大樹レーシングクラブ</option>
+                                <option value="ワラウカド">ワラウカド</option>
+                                <option value="インゼル">インゼルサラブレッドクラブ</option>
+                                <option value="京サラ">京都サラブレッドクラブ</option>
+                                <option value="バゴバゴ">その他・個人等</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="edit_race_date">出走日 <span class="required">*</span></label>
+                        <input type="date" id="edit_race_date" name="race_date" required>
+                    </div>
+                    <div class="col">
+                        <label for="edit_racecourse">競馬場 <span class="required">*</span></label>
+                        <select id="edit_racecourse" name="racecourse" required>
+                            <optgroup label="JRA (中央)">
+                                <option value="札幌">札幌</option>
+                                <option value="函館">函館</option>
+                                <option value="福島">福島</option>
+                                <option value="新潟">新潟</option>
+                                <option value="東京">東京</option>
+                                <option value="中山">中山</option>
+                                <option value="中京">中京</option>
+                                <option value="京都">京都</option>
+                                <option value="阪神">阪神</option>
+                                <option value="小倉">小倉</option>
+                            </optgroup>
+                            <optgroup label="地方競馬">
+                                <option value="門別">門別</option>
+                                <option value="帯広">帯広(ばんえい)</option>
+                                <option value="盛岡">盛岡</option>
+                                <option value="水沢">水沢</option>
+                                <option value="浦和">浦和</option>
+                                <option value="船橋">船橋</option>
+                                <option value="大井">大井</option>
+                                <option value="川崎">川崎</option>
+                                <option value="金沢">金沢</option>
+                                <option value="笠松">笠松</option>
+                                <option value="名古屋">名古屋</option>
+                                <option value="園田">園田</option>
+                                <option value="姫路">姫路</option>
+                                <option value="高知">高知</option>
+                                <option value="佐賀">佐賀</option>
+                            </optgroup>
+                            <optgroup label="その他">
+                                <option value="海外">海外</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="edit_race_number">レース番号 <span class="required">*</span></label>
+                        <select id="edit_race_number" name="race_number" required>
+                            <option value="1">1 R</option>
+                            <option value="2">2 R</option>
+                            <option value="3">3 R</option>
+                            <option value="4">4 R</option>
+                            <option value="5">5 R</option>
+                            <option value="6">6 R</option>
+                            <option value="7">7 R</option>
+                            <option value="8">8 R</option>
+                            <option value="9">9 R</option>
+                            <option value="10">10 R</option>
+                            <option value="11">11 R</option>
+                            <option value="12">12 R</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="edit_surface">コース条件 <span class="required">*</span></label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <select id="edit_surface" name="surface" required style="flex: 1;">
+                                <option value="芝">芝</option>
+                                <option value="ダート">ダート</option>
+                                <option value="障害">障害</option>
+                            </select>
+                            <input type="text" id="edit_distance" name="distance" required placeholder="例: 2400m"
+                                style="flex: 2;">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit_confidence">自信度 <span class="required">*</span></label>
+                    <select id="edit_confidence" name="confidence" required>
+                        <option value="5">★★★★★ (大勝負！)</option>
+                        <option value="4">★★★★☆ (期待大)</option>
+                        <option value="3">★★★☆☆ (チャンスあり)</option>
+                        <option value="2">★★☆☆☆ (入着目標)</option>
+                        <option value="1">★☆☆☆☆ (無事これ名馬)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit_comment">一言コメント (任意)</label>
+                    <textarea id="edit_comment" name="comment" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit_poster_name">投稿者名 (任意)</label>
+                    <input type="text" id="edit_poster_name" name="poster_name">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn" id="submit-update-btn">更新する</button>
+                    <button type="button" class="cancel-btn" id="cancel-edit-btn">キャンセル</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer>
+        <div class="footer-content">
+            <p>当サイトは「あにまん掲示板」の一口馬主部ファンが有志で作成した非公式の共有サイトです。</p>
+            <p>投稿パスワードは暗号化して保存しており、個人情報の収集等は一切行っておりません。</p>
+        </div>
+    </footer>
+
+    <script src="/static/app.js?v=7"></script>
+</body>
+
+</html>
