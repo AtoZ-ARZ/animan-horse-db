@@ -21,39 +21,71 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "animan_admin_pass")
 
 # データベース初期化
 def init_db():
-    conn = sqlite3.connect(DB_FILE)
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS posts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            horse_name TEXT NOT NULL,
-            club TEXT NOT NULL,
-            race_date TEXT NOT NULL,
-            racecourse TEXT NOT NULL,
-            race_number INTEGER NOT NULL,
-            conditions TEXT NOT NULL,
-            confidence INTEGER NOT NULL,
-            poster_name TEXT,
-            comment TEXT,
-            password TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    conn.commit()
-    conn.close()
+    if DATABASE_URL:
+        conn = psycopg2.connect(DATABASE_URL)
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS posts (
+                id SERIAL PRIMARY KEY,
+                horse_name VARCHAR(255) NOT NULL,
+                club VARCHAR(100) NOT NULL,
+                race_date VARCHAR(20) NOT NULL,
+                racecourse VARCHAR(100) NOT NULL,
+                race_number INTEGER NOT NULL,
+                conditions VARCHAR(255) NOT NULL,
+                confidence INTEGER NOT NULL,
+                poster_name VARCHAR(255),
+                comment TEXT,
+                password VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        conn.commit()
+        conn.close()
+    else:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS posts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                horse_name TEXT NOT NULL,
+                club TEXT NOT NULL,
+                race_date TEXT NOT NULL,
+                racecourse TEXT NOT NULL,
+                race_number INTEGER NOT NULL,
+                conditions TEXT NOT NULL,
+                confidence INTEGER NOT NULL,
+                poster_name TEXT,
+                comment TEXT,
+                password TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        conn.commit()
+        conn.close()
 
 @app.on_event("startup")
 def startup():
-    init_db()
+    if not os.path.exists(DB_FILE) and not DATABASE_URL:
+        init_db()
+    elif DATABASE_URL:
+        init_db()
 
 # DB接続取得ユーティリティ
 def get_db():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row  # 辞書形式でアクセス可能にする
-    try:
-        yield conn
-    finally:
-        conn.close()
+    if DATABASE_URL:
+        conn = psycopg2.connect(DATABASE_URL)
+        try:
+            yield conn
+        finally:
+            conn.close()
+    else:
+        conn = sqlite3.connect(DB_FILE)
+        conn.row_factory = sqlite3.Row  # 辞書形式でアクセス可能にする
+        try:
+            yield conn
+        finally:
+            conn.close()
 
 # リクエスト・レスポンス用のPydanticモデル
 class PostBase(BaseModel):
