@@ -209,7 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-header">
-                    <div class="race-info">${post.racecourse} ${post.race_number}R</div>
+                    <div class="race-info">
+                        ${post.racecourse} ${post.race_number}R
+                        ${post.race_name ? `<span class="race-name" style="margin-left: 8px; font-weight: normal; font-size: 0.9em; color: var(--text-secondary);">${escapeHTML(post.race_name)}</span>` : ''}
+                    </div>
                     <div class="header-right">
                         <div class="race-date">${dateStr}</div>
                         <button class="action-btn edit-action-btn" data-id="${post.id}">編集/削除</button>
@@ -273,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('edit_race_date').value = post.race_date;
         document.getElementById('edit_racecourse').value = post.racecourse;
         document.getElementById('edit_race_number').value = post.race_number;
+        document.getElementById('edit_race_name').value = post.race_name || '';
 
         // DBのconditionsをsurfaceとdistanceに分割してUIにセット
         let surface = '芝';

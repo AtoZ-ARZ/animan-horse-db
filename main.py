@@ -94,6 +94,7 @@ class PostBase(BaseModel):
     race_date: str
     racecourse: str
     race_number: int
+    race_name: Optional[str] = ""
     conditions: str
     confidence: int
     poster_name: Optional[str] = ""
@@ -130,7 +131,7 @@ def get_posts(db = Depends(get_db)):
 
     # レース開催日が近い順、同じならレース番号順
     cursor.execute('''
-        SELECT id, horse_name, club, race_date, racecourse, race_number, 
+        SELECT id, horse_name, club, race_date, racecourse, race_number, race_name,
                conditions, confidence, poster_name, comment, created_at 
         FROM posts 
         ORDER BY race_date ASC, racecourse ASC, race_number ASC
@@ -160,9 +161,9 @@ def create_post(post: PostCreate, db = Depends(get_db)):
     
     query = '''
         INSERT INTO posts (
-            horse_name, club, race_date, racecourse, race_number, 
+            horse_name, club, race_date, racecourse, race_number, race_name,
             conditions, confidence, poster_name, comment, password
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
     
     if DATABASE_URL:
@@ -170,13 +171,13 @@ def create_post(post: PostCreate, db = Depends(get_db)):
         # PostgreSQL では RETURNING id で挿入したIDを取得する
         query += " RETURNING id"
         cursor.execute(query, (
-            post.horse_name, post.club, post.race_date, post.racecourse, post.race_number,
+            post.horse_name, post.club, post.race_date, post.racecourse, post.race_number, post.race_name,
             post.conditions, post.confidence, post.poster_name, post.comment, hashed_password
         ))
         post_id = cursor.fetchone()['id']
     else:
         cursor.execute(query, (
-            post.horse_name, post.club, post.race_date, post.racecourse, post.race_number,
+            post.horse_name, post.club, post.race_date, post.racecourse, post.race_number, post.race_name,
             post.conditions, post.confidence, post.poster_name, post.comment, hashed_password
         ))
         post_id = cursor.lastrowid
@@ -211,7 +212,7 @@ def update_post(post_id: int, post: PostUpdate, db: sqlite3.Connection = Depends
     
     query = '''
         UPDATE posts SET 
-            horse_name = ?, club = ?, race_date = ?, racecourse = ?, race_number = ?, 
+            horse_name = ?, club = ?, race_date = ?, racecourse = ?, race_number = ?, race_name = ?,
             conditions = ?, confidence = ?, poster_name = ?, comment = ?
         WHERE id = ?
     '''
@@ -219,7 +220,7 @@ def update_post(post_id: int, post: PostUpdate, db: sqlite3.Connection = Depends
         query = query.replace('?', '%s')
         
     cursor.execute(query, (
-        post.horse_name, post.club, post.race_date, post.racecourse, post.race_number,
+        post.horse_name, post.club, post.race_date, post.racecourse, post.race_number, post.race_name,
         post.conditions, post.confidence, post.poster_name, post.comment, post_id
     ))
     db.commit()
